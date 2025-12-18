@@ -178,6 +178,35 @@
         }
 
         .log-entry { margin-bottom: 4px; border-left: 2px solid var(--accent-green); padding-left: 8px; }
+        .log-entry.event-danger { border-left-color: var(--accent-red); }
+        .log-entry.event-good { border-left-color: var(--accent-cyan); }
+        .log-entry.event-warning { border-left-color: var(--accent-yellow); }
+        .log-timestamp { color: var(--text-dim); font-size: 0.65rem; margin-right: 6px; }
+
+        /* Trade feedback flash */
+        @keyframes flash-green {
+            0%, 100% { background: transparent; }
+            50% { background: rgba(0, 255, 0, 0.2); }
+        }
+        @keyframes flash-red {
+            0%, 100% { background: transparent; }
+            50% { background: rgba(255, 0, 0, 0.2); }
+        }
+        .flash-buy { animation: flash-green 0.4s ease-out; }
+        .flash-sell { animation: flash-green 0.4s ease-out; }
+        .flash-damage { animation: flash-red 0.4s ease-out; }
+
+        /* Event modal styling */
+        .event-text { font-size: 0.9rem; margin: 15px 0; line-height: 1.4; }
+
+        /* Price trend indicators */
+        .trend-up::after { content: ' ▲'; color: var(--accent-green); font-size: 0.7rem; }
+        .trend-down::after { content: ' ▼'; color: var(--accent-red); font-size: 0.7rem; }
+        .trend-spike::after { content: ' ⚡'; color: var(--accent-yellow); font-size: 0.7rem; }
+        .trend-crash::after { content: ' 💥'; font-size: 0.7rem; }
+
+        /* Sector specialty indicator */
+        .sector-specialty { font-size: 0.6rem; color: var(--accent-cyan); display: block; }
 
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -262,6 +291,7 @@
     <div class="modal">
         <h2 class="text-green">NEON TRADER</h2>
         <p>Buy low, sell high. Pay the shark. Survive 30 days.</p>
+        <p style="font-size: 0.7rem; color: var(--text-dim);">Each sector has specialties. Watch your health. Random events will test you.</p>
         <button class="btn" onclick="startGame()">JACK IN</button>
     </div>
 </div>
@@ -309,6 +339,16 @@
     </div>
 </div>
 
+<!-- Random Event Modal -->
+<div id="modal-event" class="modal-overlay hidden">
+    <div class="modal">
+        <h3 id="event-title" class="text-yellow">EVENT</h3>
+        <p id="event-text" class="event-text"></p>
+        <p id="event-effect" style="font-size: 0.8rem;"></p>
+        <button class="btn" onclick="closeModal('modal-event')">OK</button>
+    </div>
+</div>
+
 <script>
 const MAX_DAYS = 30;
 const ITEMS = [
@@ -318,15 +358,48 @@ const ITEMS = [
     { id: 'parts', name: 'Mech-Parts', min: 500, max: 1500 },
     { id: 'cores', name: 'AI Cores', min: 2000, max: 8000 }
 ];
-const LOCS = ["Sector 7", "Neon Bay", "The Stack", "Void", "High City"];
+
+// Location specializations: each sector has cheap/expensive items
+const LOCATIONS = [
+    { name: "Sector 7", cheap: 'h2o', expensive: 'cores', desc: "Water district" },
+    { name: "Neon Bay", cheap: 'stims', expensive: 'parts', desc: "Party zone" },
+    { name: "The Stack", cheap: 'parts', expensive: 'stims', desc: "Industrial hub" },
+    { name: "Void", cheap: 'cores', expensive: 'h2o', desc: "Black market" },
+    { name: "High City", cheap: 'chips', expensive: 'h2o', desc: "Tech elite" }
+];
+const LOCS = LOCATIONS.map(l => l.name);
+
+// Random events that can occur during travel
+const EVENTS = {
+    good: [
+        { title: "Lucky Find!", text: "You found a stash of credits hidden in an alley.", effect: () => { const amt = Math.floor(Math.random() * 500) + 100; state.cash += amt; return `+$${amt} cash`; }},
+        { title: "Market Tip", text: "A contact tips you off about a price surge.", effect: () => { const item = ITEMS[Math.floor(Math.random() * ITEMS.length)]; state.prices[item.id] = Math.floor(state.prices[item.id] * 1.5); state.priceTrends[item.id] = 'spike'; return `${item.name} prices spiked!`; }},
+        { title: "Medical Supply", text: "You found some medical supplies.", effect: () => { const heal = Math.min(100 - state.health, 25); state.health += heal; return heal > 0 ? `+${heal}% health` : "Already at full health"; }},
+        { title: "Debt Forgiveness", text: "An anonymous benefactor paid part of your debt.", effect: () => { const amt = Math.floor(state.debt * 0.1); state.debt -= amt; return `-$${amt} debt`; }}
+    ],
+    bad: [
+        { title: "Mugged!", text: "A gang jumped you in a dark corridor.", effect: () => { const loss = Math.floor(state.cash * 0.15); state.cash -= loss; state.health -= 15; return `-$${loss} cash, -15% health`; }},
+        { title: "Police Raid!", text: "Sector police confiscated some of your goods.", effect: () => { let lost = []; ITEMS.forEach(item => { if (state.inventory[item.id] > 0) { const confiscated = Math.ceil(state.inventory[item.id] * 0.2); state.inventory[item.id] -= confiscated; if (confiscated > 0) lost.push(`${confiscated} ${item.name}`); }}); return lost.length > 0 ? `Lost: ${lost.join(', ')}` : "Nothing confiscated"; }},
+        { title: "Bad Deal", text: "A trader scammed you with counterfeit credits.", effect: () => { const loss = Math.floor(Math.random() * 300) + 100; state.cash = Math.max(0, state.cash - loss); return `-$${loss} cash`; }},
+        { title: "Toxic Exposure", text: "You passed through a contaminated zone.", effect: () => { state.health -= 20; return "-20% health"; }},
+        { title: "Market Crash!", text: "A major buyer pulled out of the market.", effect: () => { const item = ITEMS[Math.floor(Math.random() * ITEMS.length)]; state.prices[item.id] = Math.floor(state.prices[item.id] * 0.4); state.priceTrends[item.id] = 'crash'; return `${item.name} prices crashed!`; }}
+    ],
+    neutral: [
+        { title: "Rumor Mill", text: "You hear whispers about price changes coming...", effect: () => { return "Stay alert for opportunities."; }},
+        { title: "Sector Lockdown", text: "Temporary security increase. Nothing happened.", effect: () => { return "No effect."; }}
+    ]
+};
 
 let state = {
     day: 1, cash: 5000, debt: 3000, health: 100, cap: 100,
-    loc: 0, inventory: {}, prices: {}, gameOver: false
+    loc: 0, inventory: {}, prices: {}, priceTrends: {}, gameOver: false
 };
 
 function init() {
-    ITEMS.forEach(i => state.inventory[i.id] = 0);
+    ITEMS.forEach(i => {
+        state.inventory[i.id] = 0;
+        state.priceTrends[i.id] = null;
+    });
     generatePrices();
     renderLocs();
     updateUI();
@@ -335,11 +408,32 @@ function init() {
 function startGame() {
     init();
     closeModal('modal-start');
+    log("New game started. Good luck, runner.", "good");
 }
 
 function generatePrices() {
+    const loc = LOCATIONS[state.loc];
     ITEMS.forEach(item => {
-        state.prices[item.id] = Math.floor(item.min + Math.random() * (item.max - item.min));
+        // Base price with random variation
+        let price = Math.floor(item.min + Math.random() * (item.max - item.min));
+
+        // Apply location specialization modifiers
+        if (item.id === loc.cheap) {
+            price = Math.floor(price * 0.6); // 40% discount on specialty
+        } else if (item.id === loc.expensive) {
+            price = Math.floor(price * 1.4); // 40% markup on rare items
+        }
+
+        // Clear previous trends unless they were just set by an event
+        if (state.priceTrends[item.id] !== 'spike' && state.priceTrends[item.id] !== 'crash') {
+            // Random minor trend (visual indicator)
+            const trend = Math.random();
+            if (trend < 0.2) state.priceTrends[item.id] = 'up';
+            else if (trend < 0.4) state.priceTrends[item.id] = 'down';
+            else state.priceTrends[item.id] = null;
+        }
+
+        state.prices[item.id] = Math.max(item.min, price); // Don't go below minimum
     });
 }
 
@@ -347,19 +441,32 @@ function updateUI() {
     document.getElementById('stat-cash').innerText = '$' + state.cash.toLocaleString();
     document.getElementById('stat-debt').innerText = '$' + state.debt.toLocaleString();
     document.getElementById('stat-health').innerText = state.health + '%';
+    // Update health color based on value
+    const healthEl = document.getElementById('stat-health');
+    healthEl.className = state.health > 50 ? 'stat-value text-pink' : (state.health > 25 ? 'stat-value text-yellow' : 'stat-value text-red');
     document.getElementById('stat-hold').innerText = Object.values(state.inventory).reduce((a,b)=>a+b,0);
     document.getElementById('stat-loc').innerText = LOCS[state.loc];
     document.getElementById('header-day').innerText = `Day ${state.day}/${MAX_DAYS}`;
 
+    const loc = LOCATIONS[state.loc];
     const body = document.getElementById('market-body');
     body.innerHTML = '';
     ITEMS.forEach(item => {
         const row = document.createElement('tr');
+        row.id = `row-${item.id}`;
         const price = state.prices[item.id];
         const owned = state.inventory[item.id];
+        const trend = state.priceTrends[item.id];
+        const trendClass = trend ? `trend-${trend}` : '';
+
+        // Check if this item is cheap or expensive here
+        let specialtyTag = '';
+        if (item.id === loc.cheap) specialtyTag = '<span class="sector-specialty">▼ CHEAP HERE</span>';
+        else if (item.id === loc.expensive) specialtyTag = '<span class="sector-specialty">▲ EXPENSIVE</span>';
+
         row.innerHTML = `
-            <td>${item.name}</td>
-            <td class="text-green">$${price}</td>
+            <td>${item.name}${specialtyTag}</td>
+            <td class="text-green ${trendClass}">$${price}</td>
             <td>${owned > 0 ? `<span class="qty-badge">${owned}</span>` : '-'}</td>
             <td style="text-align:right">
                 <button class="btn" style="padding:4px 8px; font-size:0.7rem;" onclick="openTrade('${item.id}', 'buy')">BUY</button>
@@ -373,10 +480,11 @@ function updateUI() {
 function renderLocs() {
     const bar = document.getElementById('locations-bar');
     bar.innerHTML = '';
-    LOCS.forEach((l, i) => {
+    LOCATIONS.forEach((loc, i) => {
         const b = document.createElement('button');
         b.className = 'btn';
-        b.innerText = l;
+        b.innerHTML = `${loc.name}<span class="sector-specialty">${loc.desc}</span>`;
+        b.style.textAlign = 'center';
         b.disabled = (i === state.loc);
         b.onclick = () => travel(i);
         bar.appendChild(b);
@@ -388,11 +496,75 @@ function travel(idx) {
     state.day++;
     state.loc = idx;
     state.debt = Math.floor(state.debt * 1.1);
+
+    // Clear previous price trends before generating new prices
+    ITEMS.forEach(i => state.priceTrends[i.id] = null);
+
     generatePrices();
     renderLocs();
     updateUI();
-    log(`Arrived at ${LOCS[idx]}. Interest added to debt.`);
+
+    const loc = LOCATIONS[idx];
+    log(`Arrived at ${loc.name}. Interest added to debt.`);
+
+    // Check for random event (40% chance)
+    if (Math.random() < 0.4) {
+        triggerRandomEvent();
+    }
+
+    // Health-based danger: low health increases bad event chance
+    if (state.health <= 25 && Math.random() < 0.3) {
+        state.health -= 10;
+        log("Your injuries are getting worse. Find medical supplies!", "danger");
+        flashScreen('damage');
+    }
+
     checkGameOver();
+}
+
+function triggerRandomEvent() {
+    // Determine event type: 30% good, 50% bad, 20% neutral
+    const roll = Math.random();
+    let eventType, event;
+
+    if (roll < 0.3) {
+        eventType = 'good';
+        event = EVENTS.good[Math.floor(Math.random() * EVENTS.good.length)];
+    } else if (roll < 0.8) {
+        eventType = 'bad';
+        event = EVENTS.bad[Math.floor(Math.random() * EVENTS.bad.length)];
+    } else {
+        eventType = 'neutral';
+        event = EVENTS.neutral[Math.floor(Math.random() * EVENTS.neutral.length)];
+    }
+
+    // Execute the event effect
+    const effectResult = event.effect();
+
+    // Show event modal
+    const titleEl = document.getElementById('event-title');
+    titleEl.innerText = event.title;
+    titleEl.className = eventType === 'good' ? 'text-cyan' : (eventType === 'bad' ? 'text-red' : 'text-yellow');
+
+    document.getElementById('event-text').innerText = event.text;
+    document.getElementById('event-effect').innerHTML = `<span class="${eventType === 'good' ? 'text-green' : (eventType === 'bad' ? 'text-red' : 'text-yellow')}">${effectResult}</span>`;
+
+    openModal('modal-event');
+
+    // Log the event
+    log(`[EVENT] ${event.title}: ${effectResult}`, eventType === 'bad' ? 'danger' : (eventType === 'good' ? 'good' : 'warning'));
+
+    // Flash screen based on event type
+    if (eventType === 'bad') flashScreen('damage');
+    else if (eventType === 'good') flashScreen('buy');
+
+    updateUI();
+}
+
+function flashScreen(type) {
+    const container = document.getElementById('game-container');
+    container.classList.add(`flash-${type}`);
+    setTimeout(() => container.classList.remove(`flash-${type}`), 400);
 }
 
 function getInventoryValue() {
@@ -409,6 +581,12 @@ function getNetWorth() {
 
 function checkGameOver() {
     if (state.gameOver) return;
+
+    // Lose condition: health depleted
+    if (state.health <= 0) {
+        endGame(false, "Your body gave out. The streets claim another soul...");
+        return;
+    }
 
     // Win condition: survived 30 days
     if (state.day > MAX_DAYS) {
@@ -448,11 +626,11 @@ function endGame(won, message) {
 function restartGame() {
     state = {
         day: 1, cash: 5000, debt: 3000, health: 100, cap: 100,
-        loc: 0, inventory: {}, prices: {}, gameOver: false
+        loc: 0, inventory: {}, prices: {}, priceTrends: {}, gameOver: false
     };
     closeModal('modal-gameover');
+    document.getElementById('log-panel').innerHTML = ''; // Clear log
     init();
-    log("New game started. Good luck, runner.");
 }
 
 function openTrade(itemId, type) {
@@ -508,7 +686,9 @@ function confirmTrade(itemId, type) {
 
         state.cash -= totalCost;
         state.inventory[itemId] += qty;
-        log(`Bought ${qty} ${item.name} for $${totalCost.toLocaleString()}`);
+        log(`Bought ${qty} ${item.name} for $${totalCost.toLocaleString()}`, 'good');
+        flashScreen('buy');
+        flashRow(itemId, 'buy');
     } else {
         if (state.inventory[itemId] < qty) {
             errorEl.innerText = `You only have ${state.inventory[itemId]} to sell.`;
@@ -518,11 +698,21 @@ function confirmTrade(itemId, type) {
         const totalEarned = qty * price;
         state.cash += totalEarned;
         state.inventory[itemId] -= qty;
-        log(`Sold ${qty} ${item.name} for $${totalEarned.toLocaleString()}`);
+        log(`Sold ${qty} ${item.name} for $${totalEarned.toLocaleString()}`, 'good');
+        flashScreen('sell');
+        flashRow(itemId, 'sell');
     }
 
     closeModal('modal-trade');
     updateUI();
+}
+
+function flashRow(itemId, type) {
+    const row = document.getElementById(`row-${itemId}`);
+    if (row) {
+        row.classList.add(`flash-${type}`);
+        setTimeout(() => row.classList.remove(`flash-${type}`), 400);
+    }
 }
 
 function openDebtPayment() {
@@ -560,17 +750,24 @@ function confirmDebtPayment() {
     updateUI();
 
     if (state.debt <= 0) {
-        log(`Paid off ALL debt! You're free!`);
+        log(`Paid off ALL debt! You're free!`, 'good');
     } else {
         log(`Paid $${payment.toLocaleString()} towards debt. Remaining: $${state.debt.toLocaleString()}`);
     }
 }
 
-function log(msg) {
+function log(msg, type = null) {
     const p = document.getElementById('log-panel');
     const d = document.createElement('div');
     d.className = 'log-entry';
-    d.innerText = msg;
+    if (type) d.classList.add(`event-${type}`);
+
+    // Add timestamp
+    const now = new Date();
+    const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+    const timestamp = `<span class="log-timestamp">[Day ${state.day} ${time}]</span>`;
+
+    d.innerHTML = `${timestamp}${msg}`;
     p.prepend(d);
 }
 
