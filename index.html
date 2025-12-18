@@ -222,6 +222,7 @@
         <div class="stat-box">
             <div class="stat-label">Debt</div>
             <div class="stat-value text-red" id="stat-debt">$0</div>
+            <button class="btn" style="padding: 4px 8px; font-size: 0.6rem; margin-top: 5px; width: 100%;" onclick="openDebtPayment()">PAY DEBT</button>
         </div>
         <div class="stat-box">
             <div class="stat-label">Hold</div>
@@ -270,11 +271,41 @@
     <div class="modal">
         <h3 id="trade-title">TRADE</h3>
         <p id="trade-info"></p>
+        <p id="trade-error" class="text-red" style="font-size: 0.8rem; min-height: 1.2em;"></p>
         <input type="number" id="trade-input" pattern="\d*">
         <div style="display: flex; gap: 10px; justify-content: center;">
             <button class="btn btn-danger" onclick="closeModal('modal-trade')">CANCEL</button>
             <button class="btn" id="trade-confirm-btn">CONFIRM</button>
         </div>
+    </div>
+</div>
+
+<!-- Debt Payment Modal -->
+<div id="modal-debt" class="modal-overlay hidden">
+    <div class="modal">
+        <h3 class="text-yellow">PAY DEBT</h3>
+        <p>Current debt: <span class="text-red" id="debt-current">$0</span></p>
+        <p>Your cash: <span class="text-green" id="debt-cash">$0</span></p>
+        <input type="number" id="debt-input" pattern="\d*">
+        <div style="display: flex; gap: 10px; justify-content: center;">
+            <button class="btn btn-danger" onclick="closeModal('modal-debt')">CANCEL</button>
+            <button class="btn" onclick="confirmDebtPayment()">PAY</button>
+        </div>
+    </div>
+</div>
+
+<!-- Game Over Modal -->
+<div id="modal-gameover" class="modal-overlay hidden">
+    <div class="modal">
+        <h2 id="gameover-title" class="text-red">GAME OVER</h2>
+        <p id="gameover-message"></p>
+        <div id="gameover-stats" style="text-align: left; margin: 15px 0; padding: 10px; background: #000; border: 1px solid #333;">
+            <p>Final Cash: <span class="text-green" id="final-cash">$0</span></p>
+            <p>Final Debt: <span class="text-red" id="final-debt">$0</span></p>
+            <p>Net Worth: <span id="final-net">$0</span></p>
+            <p>Days Survived: <span class="text-cyan" id="final-days">0</span></p>
+        </div>
+        <button class="btn" onclick="restartGame()">PLAY AGAIN</button>
     </div>
 </div>
 
@@ -291,7 +322,7 @@ const LOCS = ["Sector 7", "Neon Bay", "The Stack", "Void", "High City"];
 
 let state = {
     day: 1, cash: 2000, debt: 5000, health: 100, cap: 100,
-    loc: 0, inventory: {}, prices: {}
+    loc: 0, inventory: {}, prices: {}, gameOver: false
 };
 
 function init() {
@@ -353,6 +384,7 @@ function renderLocs() {
 }
 
 function travel(idx) {
+    if (state.gameOver) return;
     state.day++;
     state.loc = idx;
     state.debt = Math.floor(state.debt * 1.1);
@@ -360,15 +392,91 @@ function travel(idx) {
     renderLocs();
     updateUI();
     log(`Arrived at ${LOCS[idx]}. Interest added to debt.`);
-    if(state.day > MAX_DAYS) alert("Time is up! Final Cash: " + state.cash);
+    checkGameOver();
+}
+
+function getInventoryValue() {
+    let value = 0;
+    ITEMS.forEach(item => {
+        value += state.inventory[item.id] * state.prices[item.id];
+    });
+    return value;
+}
+
+function getNetWorth() {
+    return state.cash + getInventoryValue() - state.debt;
+}
+
+function checkGameOver() {
+    if (state.gameOver) return;
+
+    // Win condition: survived 30 days
+    if (state.day > MAX_DAYS) {
+        const netWorth = getNetWorth();
+        if (netWorth >= 0) {
+            endGame(true, "You survived 30 days and paid off your debt!");
+        } else {
+            endGame(false, "Time's up! You couldn't escape the debt.");
+        }
+        return;
+    }
+
+    // Lose condition: bankrupt (can't pay debt and no assets)
+    const netWorth = getNetWorth();
+    if (state.cash <= 0 && netWorth < -10000) {
+        endGame(false, "You're completely bankrupt. The loan shark sends his regards...");
+        return;
+    }
+}
+
+function endGame(won, message) {
+    state.gameOver = true;
+    const netWorth = getNetWorth();
+
+    document.getElementById('gameover-title').innerText = won ? 'YOU WIN!' : 'GAME OVER';
+    document.getElementById('gameover-title').className = won ? 'text-green' : 'text-red';
+    document.getElementById('gameover-message').innerText = message;
+    document.getElementById('final-cash').innerText = '$' + state.cash.toLocaleString();
+    document.getElementById('final-debt').innerText = '$' + state.debt.toLocaleString();
+    document.getElementById('final-net').innerText = '$' + netWorth.toLocaleString();
+    document.getElementById('final-net').className = netWorth >= 0 ? 'text-green' : 'text-red';
+    document.getElementById('final-days').innerText = Math.min(state.day, MAX_DAYS);
+
+    openModal('modal-gameover');
+}
+
+function restartGame() {
+    state = {
+        day: 1, cash: 2000, debt: 5000, health: 100, cap: 100,
+        loc: 0, inventory: {}, prices: {}, gameOver: false
+    };
+    closeModal('modal-gameover');
+    init();
+    log("New game started. Good luck, runner.");
 }
 
 function openTrade(itemId, type) {
+    if (state.gameOver) return;
     const item = ITEMS.find(i => i.id === itemId);
     const price = state.prices[itemId];
+
+    // Clear any previous error
+    document.getElementById('trade-error').innerText = '';
+
     document.getElementById('trade-title').innerText = (type === 'buy' ? 'BUY ' : 'SELL ') + item.name;
-    document.getElementById('trade-info').innerText = `Price: $${price}`;
-    document.getElementById('trade-input').value = type === 'buy' ? Math.floor(state.cash/price) : state.inventory[itemId];
+    document.getElementById('trade-info').innerText = `Price: $${price.toLocaleString()}`;
+
+    let maxQty;
+    if (type === 'buy') {
+        const currentHold = Object.values(state.inventory).reduce((a, b) => a + b, 0);
+        const spaceLeft = state.cap - currentHold;
+        const affordableQty = Math.floor(state.cash / price);
+        maxQty = Math.min(spaceLeft, affordableQty);
+    } else {
+        maxQty = state.inventory[itemId];
+    }
+
+    document.getElementById('trade-input').value = Math.max(0, maxQty);
     document.getElementById('trade-confirm-btn').onclick = () => confirmTrade(itemId, type);
     openModal('modal-trade');
 }
@@ -376,19 +484,86 @@ function openTrade(itemId, type) {
 function confirmTrade(itemId, type) {
     const qty = parseInt(document.getElementById('trade-input').value);
     const price = state.prices[itemId];
-    if(type === 'buy') {
-        if(state.cash >= qty * price) {
-            state.cash -= qty * price;
-            state.inventory[itemId] += qty;
-        }
-    } else {
-        if(state.inventory[itemId] >= qty) {
-            state.cash += qty * price;
-            state.inventory[itemId] -= qty;
-        }
+    const item = ITEMS.find(i => i.id === itemId);
+    const errorEl = document.getElementById('trade-error');
+
+    if (isNaN(qty) || qty <= 0) {
+        errorEl.innerText = "Enter a valid quantity";
+        return;
     }
+
+    if (type === 'buy') {
+        const totalCost = qty * price;
+        const currentHold = Object.values(state.inventory).reduce((a, b) => a + b, 0);
+        const spaceLeft = state.cap - currentHold;
+
+        if (qty > spaceLeft) {
+            errorEl.innerText = `Not enough space! You can only carry ${spaceLeft} more.`;
+            return;
+        }
+        if (state.cash < totalCost) {
+            errorEl.innerText = `Not enough cash! You need $${totalCost.toLocaleString()}.`;
+            return;
+        }
+
+        state.cash -= totalCost;
+        state.inventory[itemId] += qty;
+        log(`Bought ${qty} ${item.name} for $${totalCost.toLocaleString()}`);
+    } else {
+        if (state.inventory[itemId] < qty) {
+            errorEl.innerText = `You only have ${state.inventory[itemId]} to sell.`;
+            return;
+        }
+
+        const totalEarned = qty * price;
+        state.cash += totalEarned;
+        state.inventory[itemId] -= qty;
+        log(`Sold ${qty} ${item.name} for $${totalEarned.toLocaleString()}`);
+    }
+
     closeModal('modal-trade');
     updateUI();
+}
+
+function openDebtPayment() {
+    if (state.gameOver) return;
+    if (state.debt <= 0) {
+        log("You have no debt to pay!");
+        return;
+    }
+    document.getElementById('debt-current').innerText = '$' + state.debt.toLocaleString();
+    document.getElementById('debt-cash').innerText = '$' + state.cash.toLocaleString();
+    document.getElementById('debt-input').value = Math.min(state.cash, state.debt);
+    openModal('modal-debt');
+}
+
+function confirmDebtPayment() {
+    const amount = parseInt(document.getElementById('debt-input').value);
+
+    if (isNaN(amount) || amount <= 0) {
+        log("Invalid payment amount.");
+        closeModal('modal-debt');
+        return;
+    }
+
+    if (amount > state.cash) {
+        log("You don't have enough cash!");
+        closeModal('modal-debt');
+        return;
+    }
+
+    const payment = Math.min(amount, state.debt);
+    state.cash -= payment;
+    state.debt -= payment;
+
+    closeModal('modal-debt');
+    updateUI();
+
+    if (state.debt <= 0) {
+        log(`Paid off ALL debt! You're free!`);
+    } else {
+        log(`Paid $${payment.toLocaleString()} towards debt. Remaining: $${state.debt.toLocaleString()}`);
+    }
 }
 
 function log(msg) {
