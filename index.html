@@ -325,6 +325,175 @@
             padding: 10px;
             border-left: 2px solid var(--accent-red);
         }
+
+        /* Price prediction styling */
+        .price-prediction {
+            font-size: 0.6rem;
+            color: var(--accent-cyan);
+            display: block;
+            opacity: 0.8;
+        }
+        .price-prediction.pred-up { color: var(--accent-green); }
+        .price-prediction.pred-down { color: var(--accent-red); }
+
+        /* Reputation bar styling */
+        .rep-bar {
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            margin-top: 4px;
+            overflow: hidden;
+        }
+        .rep-fill {
+            height: 100%;
+            transition: width 0.3s;
+        }
+        .rep-hostile { background: var(--accent-red); }
+        .rep-neutral { background: var(--accent-yellow); }
+        .rep-friendly { background: var(--accent-green); }
+
+        /* Achievement styling */
+        .achievement-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #111;
+            border: 2px solid var(--accent-yellow);
+            padding: 30px;
+            z-index: 300;
+            text-align: center;
+            animation: achievement-in 0.5s ease-out;
+            box-shadow: 0 0 50px rgba(255, 255, 0, 0.5);
+        }
+        @keyframes achievement-in {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        .achievement-icon { font-size: 3rem; margin-bottom: 10px; }
+        .achievement-title { font-size: 1.2rem; color: var(--accent-yellow); margin-bottom: 5px; }
+        .achievement-desc { font-size: 0.8rem; color: var(--text-dim); }
+        .achievement-list-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #333;
+            background: #0a0a0a;
+        }
+        .achievement-list-item.unlocked { border-color: var(--accent-yellow); }
+        .achievement-list-item.locked { opacity: 0.5; }
+        .achievement-list-icon { font-size: 1.5rem; margin-right: 10px; }
+
+        /* NPC styling */
+        .npc-portrait { font-size: 2.5rem; margin: 10px 0; }
+        .npc-name { color: var(--accent-cyan); font-weight: bold; }
+        .npc-dialog { font-style: italic; color: var(--text-dim); margin: 10px 0; padding: 10px; border-left: 2px solid var(--accent-cyan); }
+
+        /* Mission styling */
+        .mission-box {
+            border: 1px solid var(--accent-cyan);
+            padding: 10px;
+            margin: 10px 0;
+            background: #0a0a0a;
+        }
+        .mission-title { color: var(--accent-cyan); font-weight: bold; }
+        .mission-desc { font-size: 0.75rem; color: var(--text-dim); margin: 5px 0; }
+        .mission-progress { font-size: 0.7rem; color: var(--accent-yellow); }
+        .mission-reward { font-size: 0.7rem; color: var(--accent-green); }
+
+        /* Hideout styling */
+        .hideout-upgrade {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #333;
+            background: #0a0a0a;
+        }
+        .hideout-upgrade.owned { border-color: var(--accent-green); }
+        .hideout-level { font-size: 0.6rem; color: var(--accent-cyan); }
+
+        /* Mini-game styling */
+        .hack-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            margin: 15px 0;
+        }
+        .hack-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            border: 1px solid #333;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .hack-cell:hover { border-color: var(--accent-cyan); }
+        .hack-cell.selected { background: var(--accent-cyan); color: #000; }
+        .hack-cell.correct { background: var(--accent-green); color: #000; }
+        .hack-cell.wrong { background: var(--accent-red); color: #000; }
+        .hack-sequence {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        .hack-target {
+            padding: 5px 10px;
+            background: #000;
+            border: 1px solid var(--accent-yellow);
+            font-family: var(--font-mono);
+        }
+        .hack-target.matched { border-color: var(--accent-green); background: rgba(0,255,0,0.2); }
+        .hack-timer {
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
+            margin: 10px 0;
+        }
+
+        /* Negotiation styling */
+        .negotiate-bar {
+            height: 20px;
+            background: linear-gradient(to right, var(--accent-red), var(--accent-yellow), var(--accent-green));
+            border-radius: 10px;
+            position: relative;
+            margin: 20px 0;
+        }
+        .negotiate-marker {
+            position: absolute;
+            top: -5px;
+            width: 4px;
+            height: 30px;
+            background: #fff;
+            transform: translateX(-50%);
+            transition: left 0.1s;
+        }
+        .negotiate-target {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+        }
+
+        /* Sound toggle */
+        .sound-toggle {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 50;
+            background: #111;
+            border: 1px solid #333;
+            padding: 5px 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -361,7 +530,17 @@
             <div class="stat-value text-cyan" id="stat-loc">Sector 7</div>
         </div>
         <div class="stat-box">
+            <div class="stat-label">Reputation</div>
+            <div class="stat-value text-cyan" id="stat-rep">Neutral</div>
+            <div class="rep-bar"><div class="rep-fill rep-neutral" id="rep-bar-fill" style="width: 50%;"></div></div>
+        </div>
+        <div class="stat-box">
             <button class="btn" style="padding: 6px 10px; font-size: 0.7rem; width: 100%;" onclick="openShop()">SHOP</button>
+            <div style="margin-top: 5px; display: flex; gap: 5px;">
+                <button class="btn" style="padding: 4px 6px; font-size: 0.55rem; flex: 1;" onclick="openHideout()">🏠</button>
+                <button class="btn" style="padding: 4px 6px; font-size: 0.55rem; flex: 1;" onclick="openMissions()">📋</button>
+                <button class="btn" style="padding: 4px 6px; font-size: 0.55rem; flex: 1;" onclick="openAchievements()">🏆</button>
+            </div>
             <div style="margin-top: 5px; display: flex; gap: 5px;">
                 <button class="btn" style="padding: 4px 6px; font-size: 0.55rem; flex: 1;" onclick="saveGame()">SAVE</button>
                 <button class="btn" style="padding: 4px 6px; font-size: 0.55rem; flex: 1;" onclick="loadGame()">LOAD</button>
@@ -486,6 +665,85 @@
     </div>
 </div>
 
+<!-- NPC Modal -->
+<div id="modal-npc" class="modal-overlay hidden">
+    <div class="modal">
+        <div class="npc-portrait" id="npc-portrait">👤</div>
+        <h3 class="npc-name" id="npc-name">NPC</h3>
+        <p class="npc-dialog" id="npc-dialog"></p>
+        <div id="npc-offer" style="margin: 15px 0;"></div>
+        <div id="npc-buttons" style="display: flex; gap: 10px; justify-content: center;"></div>
+    </div>
+</div>
+
+<!-- Achievement Popup (shows when unlocked) -->
+<div id="achievement-popup" class="achievement-popup hidden">
+    <div class="achievement-icon" id="achieve-icon">🏆</div>
+    <div class="achievement-title" id="achieve-title">ACHIEVEMENT UNLOCKED</div>
+    <div class="achievement-desc" id="achieve-desc">Description</div>
+</div>
+
+<!-- Achievements List Modal -->
+<div id="modal-achievements" class="modal-overlay hidden">
+    <div class="modal" style="max-height: 80vh; overflow-y: auto;">
+        <h3 class="text-yellow">ACHIEVEMENTS</h3>
+        <div id="achievements-list"></div>
+        <button class="btn btn-danger" style="margin-top: 15px;" onclick="closeModal('modal-achievements')">CLOSE</button>
+    </div>
+</div>
+
+<!-- Mission Modal -->
+<div id="modal-mission" class="modal-overlay hidden">
+    <div class="modal">
+        <h3 class="text-cyan">MISSION BRIEFING</h3>
+        <div id="mission-content"></div>
+        <div id="mission-buttons" style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;"></div>
+    </div>
+</div>
+
+<!-- Hideout Modal -->
+<div id="modal-hideout" class="modal-overlay hidden">
+    <div class="modal" style="max-height: 80vh; overflow-y: auto;">
+        <h3 class="text-pink">🏠 YOUR HIDEOUT</h3>
+        <p style="font-size: 0.7rem; color: var(--text-dim);">Your cash: <span class="text-green" id="hideout-cash">$0</span></p>
+        <div id="hideout-upgrades"></div>
+        <div id="hideout-bonuses" style="margin-top: 15px; padding: 10px; border: 1px solid #333; background: #0a0a0a;">
+            <p style="font-size: 0.8rem; color: var(--accent-cyan);">Active Bonuses:</p>
+            <div id="hideout-bonus-list" style="font-size: 0.7rem; color: var(--text-dim);"></div>
+        </div>
+        <button class="btn btn-danger" style="margin-top: 15px;" onclick="closeModal('modal-hideout')">CLOSE</button>
+    </div>
+</div>
+
+<!-- Hacking Mini-game Modal -->
+<div id="modal-hack" class="modal-overlay hidden">
+    <div class="modal">
+        <h3 class="text-cyan">BREACH PROTOCOL</h3>
+        <p style="font-size: 0.7rem; color: var(--text-dim);" id="hack-instructions">Match the sequence to hack the system</p>
+        <div class="hack-timer" id="hack-timer">10</div>
+        <div class="hack-sequence" id="hack-sequence"></div>
+        <div class="hack-grid" id="hack-grid"></div>
+        <p id="hack-result" style="font-size: 0.9rem; min-height: 1.5em;"></p>
+    </div>
+</div>
+
+<!-- Negotiation Mini-game Modal -->
+<div id="modal-negotiate" class="modal-overlay hidden">
+    <div class="modal">
+        <h3 class="text-yellow">NEGOTIATION</h3>
+        <p style="font-size: 0.8rem;" id="negotiate-info">Stop the marker in the green zone for the best deal!</p>
+        <div class="negotiate-bar">
+            <div class="negotiate-target" id="negotiate-target"></div>
+            <div class="negotiate-marker" id="negotiate-marker"></div>
+        </div>
+        <p id="negotiate-result" style="font-size: 0.9rem; min-height: 1.5em;"></p>
+        <button class="btn" id="negotiate-btn" onclick="negotiateStop()">STOP!</button>
+    </div>
+</div>
+
+<!-- Sound Toggle Button -->
+<div class="sound-toggle" onclick="toggleSound()" id="sound-toggle">🔊</div>
+
 <script>
 let MAX_DAYS = 30; // Default, updated on game start
 let DIFFICULTY = 'medium'; // Default difficulty: easy, medium, hard
@@ -562,25 +820,138 @@ const SHARK_DIALOGS = [
     "Your debt is getting out of hand. Let's fix that."
 ];
 
-// Random events that can occur during travel
+// Random events that can occur during travel (expanded with 20+ new events)
 const EVENTS = {
     good: [
         { title: "Lucky Find!", text: "You found a stash of credits hidden in an alley.", effect: () => { const amt = Math.floor(Math.random() * 500) + 100; state.cash += amt; return `+$${amt} cash`; }},
         { title: "Market Tip", text: "A contact tips you off about a price surge.", effect: () => { const item = ITEMS[Math.floor(Math.random() * ITEMS.length)]; state.prices[item.id] = Math.floor(state.prices[item.id] * 1.5); state.priceTrends[item.id] = 'spike'; return `${item.name} prices spiked!`; }},
         { title: "Medical Supply", text: "You found some medical supplies.", effect: () => { const heal = Math.min(100 - state.health, 25); state.health += heal; return heal > 0 ? `+${heal}% health` : "Already at full health"; }},
-        { title: "Debt Forgiveness", text: "An anonymous benefactor paid part of your debt.", effect: () => { const amt = Math.floor(state.debt * 0.1); state.debt -= amt; return `-$${amt} debt`; }}
+        { title: "Debt Forgiveness", text: "An anonymous benefactor paid part of your debt.", effect: () => { const amt = Math.floor(state.debt * 0.1); state.debt -= amt; return `-$${amt} debt`; }},
+        { title: "Underground Auction", text: "You stumbled into an exclusive black market auction.", effect: () => { const item = ITEMS[Math.floor(Math.random() * ITEMS.length)]; const qty = Math.floor(Math.random() * 5) + 1; const space = state.cap - Object.values(state.inventory).reduce((a,b)=>a+b,0); if (space >= qty) { state.inventory[item.id] += qty; return `Free loot: ${qty}x ${item.name}!`; } return "No space for free loot!"; }},
+        { title: "Reputation Boost", text: "Word of your fair dealing spreads through the sector.", effect: () => { state.reputation[state.loc] = Math.min(100, (state.reputation[state.loc] || 50) + 15); return "+15 local reputation"; }},
+        { title: "Abandoned Cargo", text: "You found an abandoned shipment in a back alley.", effect: () => { const item = ITEMS[2 + Math.floor(Math.random() * 3)]; const qty = Math.floor(Math.random() * 3) + 1; const space = state.cap - Object.values(state.inventory).reduce((a,b)=>a+b,0); if (space >= qty) { state.inventory[item.id] += qty; return `Found ${qty}x ${item.name}!`; } return "No space for cargo!"; }},
+        { title: "Old Contact", text: "An old friend hooks you up with a cash advance.", effect: () => { const amt = Math.floor(Math.random() * 800) + 200; state.cash += amt; return `+$${amt} cash (no strings attached)`; }},
+        { title: "Security Bribe", text: "A corrupt guard offers to look the other way... and tips you off.", effect: () => { state.securityBribed = true; return "Guards won't bother you this trip"; }},
+        { title: "Stimpack Cache", text: "You found a hidden cache of medical stimpacks.", effect: () => { state.health = Math.min(100, state.health + 40); return "+40% health"; }}
     ],
     bad: [
         { title: "Mugged!", text: "A gang jumped you in a dark corridor.", effect: () => { const loss = Math.floor(state.cash * 0.15); state.cash -= loss; const dmg = state.hasArmor ? 10 : 15; state.health -= dmg; return `-$${loss} cash, -${dmg}% health`; }},
-        { title: "Police Raid!", text: "Sector police confiscated some of your goods.", effect: () => { let lost = []; ITEMS.forEach(item => { if (state.inventory[item.id] > 0) { const confiscated = Math.ceil(state.inventory[item.id] * 0.2); state.inventory[item.id] -= confiscated; if (confiscated > 0) lost.push(`${confiscated} ${item.name}`); }}); return lost.length > 0 ? `Lost: ${lost.join(', ')}` : "Nothing confiscated"; }},
+        { title: "Police Raid!", text: "Sector police confiscated some of your goods.", effect: () => { if (state.securityBribed) { state.securityBribed = false; return "Guard looked the other way!"; } let lost = []; ITEMS.forEach(item => { if (state.inventory[item.id] > 0) { const confiscated = Math.ceil(state.inventory[item.id] * 0.2); state.inventory[item.id] -= confiscated; if (confiscated > 0) lost.push(`${confiscated} ${item.name}`); }}); return lost.length > 0 ? `Lost: ${lost.join(', ')}` : "Nothing confiscated"; }},
         { title: "Bad Deal", text: "A trader scammed you with counterfeit credits.", effect: () => { const loss = Math.floor(Math.random() * 300) + 100; state.cash = Math.max(0, state.cash - loss); return `-$${loss} cash`; }},
         { title: "Toxic Exposure", text: "You passed through a contaminated zone.", effect: () => { const dmg = state.hasArmor ? 14 : 20; state.health -= dmg; return `-${dmg}% health`; }},
-        { title: "Market Crash!", text: "A major buyer pulled out of the market.", effect: () => { const item = ITEMS[Math.floor(Math.random() * ITEMS.length)]; state.prices[item.id] = Math.floor(state.prices[item.id] * 0.4); state.priceTrends[item.id] = 'crash'; return `${item.name} prices crashed!`; }}
+        { title: "Market Crash!", text: "A major buyer pulled out of the market.", effect: () => { const item = ITEMS[Math.floor(Math.random() * ITEMS.length)]; state.prices[item.id] = Math.floor(state.prices[item.id] * 0.4); state.priceTrends[item.id] = 'crash'; return `${item.name} prices crashed!`; }},
+        { title: "Hacker Attack!", text: "Someone breached your digital wallet.", effect: () => { const loss = Math.floor(state.cash * 0.1); state.cash = Math.max(0, state.cash - loss); return `-$${loss} stolen by hackers`; }},
+        { title: "Rival Sabotage", text: "A competing trader sabotaged your cargo.", effect: () => { const items = ITEMS.filter(i => state.inventory[i.id] > 0); if (items.length > 0) { const item = items[Math.floor(Math.random() * items.length)]; const lost = Math.ceil(state.inventory[item.id] * 0.25); state.inventory[item.id] -= lost; return `-${lost}x ${item.name} destroyed`; } return "No cargo to sabotage!"; }},
+        { title: "Protection Racket", text: "Local thugs demand payment for 'protection'.", effect: () => { const demand = Math.floor(Math.random() * 500) + 200; if (state.cash >= demand) { state.cash -= demand; return `-$${demand} paid to thugs`; } const dmg = state.hasArmor ? 15 : 25; state.health -= dmg; return `Couldn't pay! -${dmg}% health`; }},
+        { title: "Contaminated Goods", text: "Some of your inventory was exposed to radiation.", effect: () => { const items = ITEMS.filter(i => state.inventory[i.id] > 0); if (items.length > 0) { const item = items[Math.floor(Math.random() * items.length)]; const lost = Math.ceil(state.inventory[item.id] * 0.15); state.inventory[item.id] -= lost; return `-${lost}x ${item.name} contaminated`; } return "No goods affected"; }},
+        { title: "Ambush!", text: "You walked into an ambush in a narrow alley.", effect: () => { const dmg = state.hasArmor ? 18 : 28; state.health -= dmg; const loss = Math.floor(state.cash * 0.08); state.cash = Math.max(0, state.cash - loss); return `-${dmg}% health, -$${loss} cash`; }},
+        { title: "Sector Blackout", text: "Power grid failure causes chaos. Some goods were stolen in the dark.", effect: () => { let totalLost = 0; ITEMS.forEach(item => { if (state.inventory[item.id] > 0 && Math.random() < 0.3) { const lost = Math.ceil(state.inventory[item.id] * 0.1); state.inventory[item.id] -= lost; totalLost += lost; }}); return totalLost > 0 ? `Lost ${totalLost} items in the chaos` : "Nothing stolen"; }},
+        { title: "Corp Security", text: "Corporate enforcers demand to inspect your cargo.", effect: () => { if (state.reputation[state.loc] > 70) return "Your reputation saved you!"; const fine = Math.floor(Math.random() * 400) + 100; state.cash = Math.max(0, state.cash - fine); return `-$${fine} 'inspection fee'`; }}
     ],
     neutral: [
         { title: "Rumor Mill", text: "You hear whispers about price changes coming...", effect: () => { return "Stay alert for opportunities."; }},
-        { title: "Sector Lockdown", text: "Temporary security increase. Nothing happened.", effect: () => { return "No effect."; }}
+        { title: "Sector Lockdown", text: "Temporary security increase. Nothing happened.", effect: () => { return "No effect."; }},
+        { title: "Street Performer", text: "A street musician plays a haunting tune. You feel... something.", effect: () => { return "The music lingers in your mind."; }},
+        { title: "Graffiti Message", text: "Someone spray-painted coordinates on a wall. Maybe a dead drop?", effect: () => { if (Math.random() < 0.3) { const amt = Math.floor(Math.random() * 300) + 50; state.cash += amt; return `Found a stash: +$${amt}!`; } return "Just gang tags. Nothing useful."; }},
+        { title: "Drone Flyby", text: "A surveillance drone scans you but moves on.", effect: () => { return "You feel watched..."; }},
+        { title: "Memory Flash", text: "You remember something about this place...", effect: () => { state.reputation[state.loc] = Math.min(100, (state.reputation[state.loc] || 50) + 5); return "+5 local reputation"; }},
+        { title: "Neon Signs", text: "The flickering neon signs seem to spell out a message. Coincidence?", effect: () => { return "Probably just pareidolia."; }}
     ]
+};
+
+// NPC definitions
+const NPCS = {
+    doctor: {
+        name: "Doc Chrome",
+        portrait: "👨‍⚕️",
+        dialogs: [
+            "Need patching up, runner? I've got the good stuff.",
+            "You look like death warmed over. Let me help.",
+            "Cash up front. No insurance accepted here."
+        ],
+        sectors: [0, 2, 4] // Appears in Sector 7, The Stack, High City
+    },
+    informant: {
+        name: "Whisper",
+        portrait: "🕵️",
+        dialogs: [
+            "Psst... I know things. Valuable things.",
+            "Information is the real currency in this city.",
+            "You want to know where the money is? It'll cost you."
+        ],
+        sectors: [1, 3] // Appears in Neon Bay, Void
+    },
+    fence: {
+        name: "The Fence",
+        portrait: "🦊",
+        dialogs: [
+            "Hot merchandise? I know some buyers...",
+            "I can move anything. For the right price.",
+            "No questions asked. That's my policy."
+        ],
+        sectors: [3, 1] // Appears in Void, Neon Bay
+    },
+    rival: {
+        name: "Razor",
+        portrait: "😎",
+        dialogs: [
+            "Well, well. My favorite competition.",
+            "You're cutting into my territory, runner.",
+            "Let's settle this like professionals."
+        ],
+        sectors: [0, 1, 2, 3, 4] // Can appear anywhere
+    }
+};
+
+// Achievements system
+const ACHIEVEMENTS = [
+    { id: 'first_trade', name: 'First Steps', desc: 'Complete your first trade', icon: '🎯', check: () => state.stats.trades >= 1 },
+    { id: 'trader_10', name: 'Getting Started', desc: 'Complete 10 trades', icon: '📈', check: () => state.stats.trades >= 10 },
+    { id: 'trader_100', name: 'Professional', desc: 'Complete 100 trades', icon: '💼', check: () => state.stats.trades >= 100 },
+    { id: 'millionaire', name: 'Millionaire', desc: 'Have $1,000,000 cash at once', icon: '💰', check: () => state.cash >= 1000000 },
+    { id: 'debt_free', name: 'Freedom', desc: 'Pay off all your debt', icon: '🔓', check: () => state.debt <= 0 && state.stats.trades > 0 },
+    { id: 'survivor', name: 'Survivor', desc: 'Win with less than 10% health', icon: '💀', check: () => state.gameOver && state.health < 10 && state.health > 0 },
+    { id: 'hoarder', name: 'Hoarder', desc: 'Fill your inventory completely', icon: '📦', check: () => Object.values(state.inventory).reduce((a,b)=>a+b,0) >= state.cap },
+    { id: 'big_profit', name: 'Big Score', desc: 'Make $10,000 profit on a single sale', icon: '🤑', check: () => state.stats.biggestProfit >= 10000 },
+    { id: 'explorer', name: 'Explorer', desc: 'Visit all 5 sectors', icon: '🗺️', check: () => state.stats.sectorsVisited.size >= 5 },
+    { id: 'shark_dodger', name: 'Shark Dodger', desc: 'Survive 5 shark encounters', icon: '🦈', check: () => state.sharkVisits >= 5 },
+    { id: 'speed_run', name: 'Speed Runner', desc: 'Win in under 15 days', icon: '⚡', check: () => state.gameOver && state.day <= 15 && getNetWorth() >= 0 },
+    { id: 'pacifist', name: 'Pacifist', desc: 'Win without buying armor', icon: '☮️', check: () => state.gameOver && !state.hasArmor && getNetWorth() >= 0 },
+    { id: 'mission_1', name: 'Operator', desc: 'Complete your first mission', icon: '📋', check: () => state.stats.missionsCompleted >= 1 },
+    { id: 'mission_5', name: 'Fixer', desc: 'Complete 5 missions', icon: '🎖️', check: () => state.stats.missionsCompleted >= 5 },
+    { id: 'hack_master', name: 'Netrunner', desc: 'Successfully complete 5 hacks', icon: '💻', check: () => state.stats.hacksCompleted >= 5 },
+    { id: 'negotiate_pro', name: 'Silver Tongue', desc: 'Win 5 negotiations', icon: '🗣️', check: () => state.stats.negotiationsWon >= 5 },
+    { id: 'hideout_max', name: 'Home Owner', desc: 'Fully upgrade your hideout', icon: '🏠', check: () => Object.values(state.hideout).every(v => v >= 3) },
+    { id: 'rep_max', name: 'Legend', desc: 'Reach max reputation in any sector', icon: '⭐', check: () => Object.values(state.reputation).some(v => v >= 100) }
+];
+
+// Mission definitions
+const MISSIONS = [
+    { id: 'delivery_1', name: 'Special Delivery', desc: 'Deliver 5 Neuro-Stims to Neon Bay', type: 'delivery', target: { item: 'stims', qty: 5, sector: 1 }, reward: { cash: 2000 }, duration: 10 },
+    { id: 'delivery_2', name: 'Tech Transfer', desc: 'Bring 3 AI Cores to High City', type: 'delivery', target: { item: 'cores', qty: 3, sector: 4 }, reward: { cash: 5000 }, duration: 15 },
+    { id: 'collect_1', name: 'Scavenger Hunt', desc: 'Collect 20 of any item', type: 'collect', target: { qty: 20 }, reward: { cash: 1500 }, duration: 8 },
+    { id: 'profit_1', name: 'Big Earner', desc: 'Make $5,000 profit from trades', type: 'profit', target: { amount: 5000 }, reward: { cash: 2500, rep: 10 }, duration: 12 },
+    { id: 'visit_1', name: 'Grand Tour', desc: 'Visit all 5 sectors', type: 'visit', target: { sectors: [0,1,2,3,4] }, reward: { cash: 1000, rep: 15 }, duration: 10 },
+    { id: 'survive_1', name: 'Staying Alive', desc: 'Survive 5 days without losing health', type: 'survive', target: { days: 5 }, reward: { cash: 3000 }, duration: 5 },
+    { id: 'hack_1', name: 'System Breach', desc: 'Successfully hack 3 systems', type: 'hack', target: { count: 3 }, reward: { cash: 4000 }, duration: 15 },
+    { id: 'wealth_1', name: 'Net Positive', desc: 'Reach $25,000 net worth', type: 'wealth', target: { amount: 25000 }, reward: { cash: 5000, rep: 20 }, duration: 20 }
+];
+
+// Hideout upgrades
+const HIDEOUT_UPGRADES = [
+    { id: 'security', name: 'Security System', desc: 'Reduce theft event losses', levels: ['Basic Locks', 'Cameras', 'Armed Drones'], costs: [1000, 3000, 8000], effects: [0.1, 0.2, 0.35] },
+    { id: 'medbay', name: 'Medical Bay', desc: 'Passive health regen per day', levels: ['First Aid Kit', 'Auto-Doc', 'Trauma Center'], costs: [1500, 4000, 10000], effects: [2, 5, 10] },
+    { id: 'intel', name: 'Intel Network', desc: 'Better price predictions', levels: ['Street Contacts', 'Informant Ring', 'Spy Satellite'], costs: [2000, 5000, 12000], effects: [1, 2, 3] },
+    { id: 'storage', name: 'Hidden Storage', desc: 'Bonus cargo capacity', levels: ['False Floor', 'Hidden Room', 'Warehouse'], costs: [1000, 2500, 6000], effects: [10, 25, 50] }
+];
+
+// Sector-specific traits
+const SECTOR_TRAITS = {
+    0: { name: "Sector 7", danger: 0.3, police: 0.4, trait: "Water district - Low danger, high police presence" },
+    1: { name: "Neon Bay", danger: 0.5, police: 0.2, trait: "Party zone - Moderate danger, corrupt cops" },
+    2: { name: "The Stack", danger: 0.4, police: 0.5, trait: "Industrial - Corporate security active" },
+    3: { name: "Void", danger: 0.7, police: 0.1, trait: "Black market - High danger, no law" },
+    4: { name: "High City", danger: 0.2, police: 0.6, trait: "Elite zone - Low danger, strict enforcement" }
 };
 
 let state = {
@@ -596,8 +967,32 @@ let state = {
     hasScanner: false,
     // Loan shark tracking
     sharkVisits: 0,
-    lastSharkDay: 0
+    lastSharkDay: 0,
+    // New features
+    reputation: {}, // Per-sector reputation (0-100)
+    achievements: [], // Unlocked achievement IDs
+    activeMission: null, // Current active mission
+    missionProgress: {}, // Track mission progress
+    hideout: {}, // Hideout upgrade levels
+    stats: { // Tracking stats for achievements
+        trades: 0,
+        totalProfit: 0,
+        biggestProfit: 0,
+        sectorsVisited: new Set(),
+        missionsCompleted: 0,
+        hacksCompleted: 0,
+        negotiationsWon: 0,
+        daysWithoutDamage: 0,
+        lastHealth: 100
+    },
+    // Temporary state
+    securityBribed: false,
+    lastNpcDay: 0
 };
+
+// Sound system
+let soundEnabled = true;
+let audioCtx = null;
 
 function init() {
     ITEMS.forEach(i => {
@@ -609,9 +1004,33 @@ function init() {
     UPGRADES.forEach(u => {
         state.upgrades[u.id] = 0;
     });
+    // Initialize reputation for all sectors
+    LOCATIONS.forEach((loc, i) => {
+        state.reputation[i] = 50; // Start neutral
+    });
+    // Initialize hideout upgrades
+    HIDEOUT_UPGRADES.forEach(u => {
+        state.hideout[u.id] = 0;
+    });
+    // Initialize stats
+    state.stats = {
+        trades: 0,
+        totalProfit: 0,
+        biggestProfit: 0,
+        sectorsVisited: new Set([0]), // Start in Sector 7
+        missionsCompleted: 0,
+        hacksCompleted: 0,
+        negotiationsWon: 0,
+        daysWithoutDamage: 0,
+        lastHealth: 100
+    };
+    // Apply hideout storage bonus
+    applyHideoutBonuses();
     generatePrices();
     renderLocs();
     updateUI();
+    // Initialize sound system
+    initSound();
 }
 
 function selectDifficulty(diff) {
@@ -1446,6 +1865,1020 @@ function checkAutoLoad() {
         } catch (e) {}
     }
 }
+
+// ==================== SOUND SYSTEM ====================
+
+function initSound() {
+    try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (e) {
+        soundEnabled = false;
+    }
+}
+
+function playSound(type) {
+    if (!soundEnabled || !audioCtx) return;
+
+    try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        switch(type) {
+            case 'buy':
+                osc.frequency.value = 440;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+                break;
+            case 'sell':
+                osc.frequency.value = 660;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+                break;
+            case 'damage':
+                osc.frequency.value = 150;
+                osc.type = 'sawtooth';
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.2);
+                break;
+            case 'achievement':
+                osc.frequency.value = 523;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                setTimeout(() => {
+                    const osc2 = audioCtx.createOscillator();
+                    const gain2 = audioCtx.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(audioCtx.destination);
+                    osc2.frequency.value = 659;
+                    osc2.type = 'sine';
+                    gain2.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                    osc2.start();
+                    osc2.stop(audioCtx.currentTime + 0.2);
+                }, 100);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+                break;
+            case 'hack':
+                osc.frequency.value = 800;
+                osc.type = 'square';
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+                break;
+            case 'travel':
+                osc.frequency.value = 300;
+                osc.type = 'triangle';
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.3);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+                break;
+            case 'click':
+                osc.frequency.value = 1000;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.03);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.03);
+                break;
+        }
+    } catch (e) {}
+}
+
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+    document.getElementById('sound-toggle').innerText = soundEnabled ? '🔊' : '🔇';
+    if (soundEnabled) playSound('click');
+}
+
+// ==================== PRICE SCANNER SYSTEM ====================
+
+function getPricePrediction(itemId) {
+    if (!state.hasScanner) return null;
+
+    const intelLevel = state.hideout.intel || 0;
+    const cycle = state.priceCycles[itemId];
+    const trend = state.priceTrends[itemId];
+
+    // Better predictions with higher intel
+    const accuracy = 0.6 + (intelLevel * 0.15);
+
+    if (cycle) {
+        if (cycle.type === 'bubble' && cycle.duration <= 2) {
+            return { text: 'BUBBLE - May pop soon!', class: 'pred-down' };
+        } else if (cycle.type === 'bubble') {
+            return { text: '📈 Rising fast', class: 'pred-up' };
+        } else if (cycle.type === 'falling') {
+            return { text: '📉 Recovering soon', class: 'pred-down' };
+        }
+    }
+
+    // Predict based on sector specialties
+    const loc = LOCATIONS[state.loc];
+    const item = ITEMS.find(i => i.id === itemId);
+
+    // Find best/worst sectors for this item
+    let bestSector = null, worstSector = null;
+    LOCATIONS.forEach((l, i) => {
+        if (l.cheap === itemId) bestSector = l.name;
+        if (l.expensive === itemId) worstSector = l.name;
+    });
+
+    if (Math.random() < accuracy) {
+        if (trend === 'up') return { text: '▲ Trending up', class: 'pred-up' };
+        if (trend === 'down') return { text: '▼ Trending down', class: 'pred-down' };
+        if (bestSector && state.loc !== LOCATIONS.findIndex(l => l.name === bestSector)) {
+            return { text: `Cheap at ${bestSector}`, class: 'pred-up' };
+        }
+    }
+
+    return null;
+}
+
+// ==================== REPUTATION SYSTEM ====================
+
+function getReputationLevel(rep) {
+    if (rep >= 80) return { name: 'Respected', class: 'rep-friendly', modifier: 0.9 };
+    if (rep >= 60) return { name: 'Known', class: 'rep-friendly', modifier: 0.95 };
+    if (rep >= 40) return { name: 'Neutral', class: 'rep-neutral', modifier: 1.0 };
+    if (rep >= 20) return { name: 'Suspicious', class: 'rep-neutral', modifier: 1.05 };
+    return { name: 'Hostile', class: 'rep-hostile', modifier: 1.15 };
+}
+
+function updateReputation(sector, amount) {
+    state.reputation[sector] = Math.max(0, Math.min(100, (state.reputation[sector] || 50) + amount));
+}
+
+// ==================== ACHIEVEMENT SYSTEM ====================
+
+function checkAchievements() {
+    ACHIEVEMENTS.forEach(ach => {
+        if (!state.achievements.includes(ach.id) && ach.check()) {
+            unlockAchievement(ach);
+        }
+    });
+}
+
+function unlockAchievement(achievement) {
+    if (state.achievements.includes(achievement.id)) return;
+
+    state.achievements.push(achievement.id);
+    playSound('achievement');
+
+    // Show popup
+    document.getElementById('achieve-icon').innerText = achievement.icon;
+    document.getElementById('achieve-title').innerText = achievement.name;
+    document.getElementById('achieve-desc').innerText = achievement.desc;
+    document.getElementById('achievement-popup').classList.remove('hidden');
+
+    setTimeout(() => {
+        document.getElementById('achievement-popup').classList.add('hidden');
+    }, 3000);
+
+    log(`🏆 Achievement Unlocked: ${achievement.name}!`, 'good');
+}
+
+function openAchievements() {
+    const container = document.getElementById('achievements-list');
+    container.innerHTML = '';
+
+    ACHIEVEMENTS.forEach(ach => {
+        const unlocked = state.achievements.includes(ach.id);
+        const div = document.createElement('div');
+        div.className = `achievement-list-item ${unlocked ? 'unlocked' : 'locked'}`;
+        div.innerHTML = `
+            <span class="achievement-list-icon">${unlocked ? ach.icon : '🔒'}</span>
+            <div style="flex: 1;">
+                <div style="font-weight: bold; color: ${unlocked ? 'var(--accent-yellow)' : 'var(--text-dim)'};">${ach.name}</div>
+                <div style="font-size: 0.7rem; color: var(--text-dim);">${unlocked ? ach.desc : '???'}</div>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+
+    openModal('modal-achievements');
+}
+
+// ==================== NPC SYSTEM ====================
+
+function checkNpcEncounter() {
+    if (state.lastNpcDay === state.day) return;
+    if (Math.random() > 0.25) return; // 25% chance per travel
+
+    // Check which NPCs can appear in this sector
+    const availableNpcs = Object.entries(NPCS).filter(([key, npc]) =>
+        npc.sectors.includes(state.loc)
+    );
+
+    if (availableNpcs.length === 0) return;
+
+    const [npcKey, npc] = availableNpcs[Math.floor(Math.random() * availableNpcs.length)];
+    state.lastNpcDay = state.day;
+    triggerNpcEncounter(npcKey, npc);
+}
+
+function triggerNpcEncounter(npcKey, npc) {
+    document.getElementById('npc-portrait').innerText = npc.portrait;
+    document.getElementById('npc-name').innerText = npc.name;
+    document.getElementById('npc-dialog').innerText = npc.dialogs[Math.floor(Math.random() * npc.dialogs.length)];
+
+    const offerDiv = document.getElementById('npc-offer');
+    const buttonsDiv = document.getElementById('npc-buttons');
+    buttonsDiv.innerHTML = '';
+    offerDiv.innerHTML = '';
+
+    switch(npcKey) {
+        case 'doctor':
+            const healCost = 300 + Math.floor(Math.random() * 200);
+            const healAmount = 30 + Math.floor(Math.random() * 20);
+            offerDiv.innerHTML = `<p>Heal <span class="text-green">${healAmount}%</span> health for <span class="text-yellow">$${healCost}</span></p>`;
+
+            const healBtn = document.createElement('button');
+            healBtn.className = 'btn';
+            healBtn.innerText = `HEAL ($${healCost})`;
+            healBtn.disabled = state.cash < healCost;
+            healBtn.onclick = () => {
+                state.cash -= healCost;
+                state.health = Math.min(100, state.health + healAmount);
+                log(`Doc Chrome patched you up! +${healAmount}% health`, 'good');
+                closeModal('modal-npc');
+                updateUI();
+                playSound('buy');
+            };
+            buttonsDiv.appendChild(healBtn);
+            break;
+
+        case 'informant':
+            const infoCost = 500 + Math.floor(Math.random() * 300);
+            offerDiv.innerHTML = `<p>Buy market intel for <span class="text-yellow">$${infoCost}</span></p>`;
+
+            const infoBtn = document.createElement('button');
+            infoBtn.className = 'btn';
+            infoBtn.innerText = `BUY INFO ($${infoCost})`;
+            infoBtn.disabled = state.cash < infoCost;
+            infoBtn.onclick = () => {
+                state.cash -= infoCost;
+                // Reveal price trends and predictions
+                const item = ITEMS[Math.floor(Math.random() * ITEMS.length)];
+                const bestSector = LOCATIONS.findIndex(l => l.cheap === item.id);
+                const worstSector = LOCATIONS.findIndex(l => l.expensive === item.id);
+                log(`Intel: ${item.name} is cheap in ${LOCATIONS[bestSector].name}, expensive in ${LOCATIONS[worstSector].name}`, 'good');
+                // Slight chance to trigger a price spike
+                if (Math.random() < 0.3) {
+                    state.prices[item.id] = Math.floor(state.prices[item.id] * 1.3);
+                    state.priceTrends[item.id] = 'spike';
+                    log(`Whisper: "Act fast on ${item.name}..."`, 'warning');
+                }
+                closeModal('modal-npc');
+                updateUI();
+                playSound('buy');
+            };
+            buttonsDiv.appendChild(infoBtn);
+            break;
+
+        case 'fence':
+            const items = ITEMS.filter(i => state.inventory[i.id] > 0);
+            if (items.length > 0) {
+                const item = items[Math.floor(Math.random() * items.length)];
+                const qty = Math.min(state.inventory[item.id], Math.floor(Math.random() * 5) + 3);
+                const bonus = 1.3 + Math.random() * 0.3; // 30-60% bonus
+                const price = Math.floor(state.prices[item.id] * bonus * qty);
+                offerDiv.innerHTML = `<p>Sell <span class="text-cyan">${qty}x ${item.name}</span> for <span class="text-green">$${price.toLocaleString()}</span> (${Math.floor(bonus * 100 - 100)}% bonus)</p>`;
+
+                const sellBtn = document.createElement('button');
+                sellBtn.className = 'btn';
+                sellBtn.innerText = 'DEAL';
+                sellBtn.onclick = () => {
+                    state.cash += price;
+                    state.inventory[item.id] -= qty;
+                    log(`Sold ${qty}x ${item.name} to the Fence for $${price.toLocaleString()}!`, 'good');
+                    state.stats.trades++;
+                    closeModal('modal-npc');
+                    updateUI();
+                    checkAchievements();
+                    playSound('sell');
+                };
+                buttonsDiv.appendChild(sellBtn);
+            } else {
+                offerDiv.innerHTML = `<p class="text-dim">You have nothing to sell...</p>`;
+            }
+            break;
+
+        case 'rival':
+            // Rival offers a challenge - negotiation mini-game
+            const stake = Math.floor(Math.random() * 1000) + 500;
+            offerDiv.innerHTML = `<p>Challenge: Negotiate for <span class="text-yellow">$${stake}</span>. Win and double it, lose and pay up.</p>`;
+
+            const challengeBtn = document.createElement('button');
+            challengeBtn.className = 'btn';
+            challengeBtn.innerText = 'ACCEPT CHALLENGE';
+            challengeBtn.disabled = state.cash < stake;
+            challengeBtn.onclick = () => {
+                closeModal('modal-npc');
+                startNegotiation(stake);
+            };
+            buttonsDiv.appendChild(challengeBtn);
+            break;
+    }
+
+    const leaveBtn = document.createElement('button');
+    leaveBtn.className = 'btn btn-danger';
+    leaveBtn.innerText = 'LEAVE';
+    leaveBtn.onclick = () => closeModal('modal-npc');
+    buttonsDiv.appendChild(leaveBtn);
+
+    openModal('modal-npc');
+}
+
+// ==================== MISSION SYSTEM ====================
+
+function openMissions() {
+    const content = document.getElementById('mission-content');
+    const buttons = document.getElementById('mission-buttons');
+    content.innerHTML = '';
+    buttons.innerHTML = '';
+
+    if (state.activeMission) {
+        const mission = MISSIONS.find(m => m.id === state.activeMission.id);
+        const progress = getMissionProgress(mission);
+        const daysLeft = state.activeMission.deadline - state.day;
+
+        content.innerHTML = `
+            <div class="mission-box">
+                <div class="mission-title">${mission.name}</div>
+                <div class="mission-desc">${mission.desc}</div>
+                <div class="mission-progress">Progress: ${progress.text}</div>
+                <div class="mission-progress">Days left: ${daysLeft}</div>
+                <div class="mission-reward">Reward: $${mission.reward.cash.toLocaleString()}${mission.reward.rep ? ` +${mission.reward.rep} rep` : ''}</div>
+            </div>
+        `;
+
+        if (progress.complete) {
+            const completeBtn = document.createElement('button');
+            completeBtn.className = 'btn';
+            completeBtn.innerText = 'COMPLETE MISSION';
+            completeBtn.onclick = () => completeMission(mission);
+            buttons.appendChild(completeBtn);
+        }
+
+        const abandonBtn = document.createElement('button');
+        abandonBtn.className = 'btn btn-danger';
+        abandonBtn.innerText = 'ABANDON';
+        abandonBtn.onclick = () => {
+            state.activeMission = null;
+            state.missionProgress = {};
+            log('Mission abandoned.', 'warning');
+            openMissions();
+        };
+        buttons.appendChild(abandonBtn);
+    } else {
+        // Show available missions
+        content.innerHTML = '<p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 10px;">Available Contracts:</p>';
+
+        const availableMissions = MISSIONS.filter(m => !state.missionProgress[m.id + '_completed']);
+        availableMissions.slice(0, 3).forEach(mission => {
+            const div = document.createElement('div');
+            div.className = 'mission-box';
+            div.innerHTML = `
+                <div class="mission-title">${mission.name}</div>
+                <div class="mission-desc">${mission.desc}</div>
+                <div class="mission-progress">Duration: ${mission.duration} days</div>
+                <div class="mission-reward">Reward: $${mission.reward.cash.toLocaleString()}${mission.reward.rep ? ` +${mission.reward.rep} rep` : ''}</div>
+            `;
+            div.style.cursor = 'pointer';
+            div.onclick = () => acceptMission(mission);
+            content.appendChild(div);
+        });
+
+        if (availableMissions.length === 0) {
+            content.innerHTML += '<p class="text-dim">No missions available. Check back later.</p>';
+        }
+    }
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'btn btn-danger';
+    closeBtn.innerText = 'CLOSE';
+    closeBtn.onclick = () => closeModal('modal-mission');
+    buttons.appendChild(closeBtn);
+
+    openModal('modal-mission');
+}
+
+function acceptMission(mission) {
+    state.activeMission = {
+        id: mission.id,
+        deadline: state.day + mission.duration,
+        startDay: state.day
+    };
+    state.missionProgress = {};
+    log(`Mission accepted: ${mission.name}`, 'good');
+    closeModal('modal-mission');
+}
+
+function getMissionProgress(mission) {
+    switch(mission.type) {
+        case 'delivery':
+            const hasItems = state.inventory[mission.target.item] >= mission.target.qty;
+            const atSector = state.loc === mission.target.sector;
+            return {
+                complete: hasItems && atSector,
+                text: `${state.inventory[mission.target.item]}/${mission.target.qty} items, ${atSector ? 'At destination' : 'Travel to ' + LOCATIONS[mission.target.sector].name}`
+            };
+        case 'collect':
+            const total = Object.values(state.inventory).reduce((a,b) => a+b, 0);
+            return {
+                complete: total >= mission.target.qty,
+                text: `${total}/${mission.target.qty} items collected`
+            };
+        case 'profit':
+            const profit = state.missionProgress.profit || 0;
+            return {
+                complete: profit >= mission.target.amount,
+                text: `$${profit.toLocaleString()}/$${mission.target.amount.toLocaleString()} profit`
+            };
+        case 'visit':
+            const visited = state.missionProgress.visited || [];
+            const remaining = mission.target.sectors.filter(s => !visited.includes(s));
+            return {
+                complete: remaining.length === 0,
+                text: `${visited.length}/${mission.target.sectors.length} sectors visited`
+            };
+        case 'survive':
+            const days = state.missionProgress.healthyDays || 0;
+            return {
+                complete: days >= mission.target.days,
+                text: `${days}/${mission.target.days} days without damage`
+            };
+        case 'hack':
+            const hacks = state.missionProgress.hacks || 0;
+            return {
+                complete: hacks >= mission.target.count,
+                text: `${hacks}/${mission.target.count} hacks completed`
+            };
+        case 'wealth':
+            const netWorth = getNetWorth();
+            return {
+                complete: netWorth >= mission.target.amount,
+                text: `$${netWorth.toLocaleString()}/$${mission.target.amount.toLocaleString()} net worth`
+            };
+        default:
+            return { complete: false, text: 'Unknown objective' };
+    }
+}
+
+function completeMission(mission) {
+    state.cash += mission.reward.cash;
+    if (mission.reward.rep) {
+        Object.keys(state.reputation).forEach(sector => {
+            state.reputation[sector] = Math.min(100, state.reputation[sector] + mission.reward.rep);
+        });
+    }
+
+    state.stats.missionsCompleted++;
+    state.missionProgress[mission.id + '_completed'] = true;
+    state.activeMission = null;
+
+    log(`Mission Complete: ${mission.name}! Reward: $${mission.reward.cash.toLocaleString()}`, 'good');
+    playSound('achievement');
+    closeModal('modal-mission');
+    updateUI();
+    checkAchievements();
+}
+
+function updateMissionProgress() {
+    if (!state.activeMission) return;
+
+    const mission = MISSIONS.find(m => m.id === state.activeMission.id);
+    if (!mission) return;
+
+    // Check mission deadline
+    if (state.day > state.activeMission.deadline) {
+        log(`Mission Failed: ${mission.name} - Time ran out!`, 'danger');
+        state.activeMission = null;
+        state.missionProgress = {};
+        return;
+    }
+
+    // Update progress based on mission type
+    switch(mission.type) {
+        case 'visit':
+            if (!state.missionProgress.visited) state.missionProgress.visited = [];
+            if (!state.missionProgress.visited.includes(state.loc)) {
+                state.missionProgress.visited.push(state.loc);
+            }
+            break;
+        case 'survive':
+            if (state.health >= state.stats.lastHealth) {
+                state.missionProgress.healthyDays = (state.missionProgress.healthyDays || 0) + 1;
+            } else {
+                state.missionProgress.healthyDays = 0;
+            }
+            break;
+    }
+}
+
+// ==================== HIDEOUT SYSTEM ====================
+
+function openHideout() {
+    document.getElementById('hideout-cash').innerText = '$' + state.cash.toLocaleString();
+    renderHideoutUpgrades();
+    renderHideoutBonuses();
+    openModal('modal-hideout');
+}
+
+function renderHideoutUpgrades() {
+    const container = document.getElementById('hideout-upgrades');
+    container.innerHTML = '';
+
+    HIDEOUT_UPGRADES.forEach(upgrade => {
+        const level = state.hideout[upgrade.id] || 0;
+        const maxLevel = upgrade.levels.length;
+        const isMaxed = level >= maxLevel;
+        const nextCost = isMaxed ? 0 : upgrade.costs[level];
+        const canBuy = state.cash >= nextCost && !isMaxed;
+
+        const div = document.createElement('div');
+        div.className = `hideout-upgrade ${level > 0 ? 'owned' : ''}`;
+        div.innerHTML = `
+            <div style="flex: 1;">
+                <div style="font-weight: bold; color: var(--accent-cyan);">${upgrade.name}</div>
+                <div style="font-size: 0.7rem; color: var(--text-dim);">${upgrade.desc}</div>
+                <div class="hideout-level">${isMaxed ? 'MAX LEVEL' : `Level ${level}/${maxLevel}: ${level > 0 ? upgrade.levels[level-1] : 'Not owned'}`}</div>
+            </div>
+            <span style="color: var(--accent-yellow); margin-right: 10px;">${isMaxed ? '' : '$' + nextCost.toLocaleString()}</span>
+            <button class="btn" style="padding: 4px 10px; font-size: 0.7rem;"
+                ${canBuy ? '' : 'disabled'}
+                onclick="buyHideoutUpgrade('${upgrade.id}')">
+                ${isMaxed ? 'MAXED' : 'UPGRADE'}
+            </button>
+        `;
+        container.appendChild(div);
+    });
+}
+
+function renderHideoutBonuses() {
+    const container = document.getElementById('hideout-bonus-list');
+    let bonuses = [];
+
+    HIDEOUT_UPGRADES.forEach(upgrade => {
+        const level = state.hideout[upgrade.id] || 0;
+        if (level > 0) {
+            const effect = upgrade.effects[level - 1];
+            switch(upgrade.id) {
+                case 'security':
+                    bonuses.push(`🔒 ${Math.floor(effect * 100)}% theft protection`);
+                    break;
+                case 'medbay':
+                    bonuses.push(`💊 +${effect}% health/day`);
+                    break;
+                case 'intel':
+                    bonuses.push(`📡 Level ${level} price predictions`);
+                    break;
+                case 'storage':
+                    bonuses.push(`📦 +${effect} cargo capacity`);
+                    break;
+            }
+        }
+    });
+
+    container.innerHTML = bonuses.length > 0 ? bonuses.join('<br>') : 'None - upgrade your hideout!';
+}
+
+function buyHideoutUpgrade(upgradeId) {
+    const upgrade = HIDEOUT_UPGRADES.find(u => u.id === upgradeId);
+    const level = state.hideout[upgrade.id] || 0;
+    const cost = upgrade.costs[level];
+
+    if (state.cash < cost || level >= upgrade.levels.length) return;
+
+    state.cash -= cost;
+    state.hideout[upgrade.id] = level + 1;
+
+    // Apply immediate effects
+    applyHideoutBonuses();
+
+    log(`Hideout upgraded: ${upgrade.name} → ${upgrade.levels[level]}`, 'good');
+    playSound('buy');
+
+    document.getElementById('hideout-cash').innerText = '$' + state.cash.toLocaleString();
+    renderHideoutUpgrades();
+    renderHideoutBonuses();
+    updateUI();
+    checkAchievements();
+}
+
+function applyHideoutBonuses() {
+    // Apply storage bonus
+    const storageLevel = state.hideout.storage || 0;
+    if (storageLevel > 0) {
+        const baseStorage = HIDEOUT_UPGRADES.find(u => u.id === 'storage');
+        const bonus = baseStorage.effects[storageLevel - 1];
+        // Only add once by checking base cap
+        const baseCap = 100 + (state.upgrades.cargo || 0) * 25;
+        state.cap = baseCap + bonus;
+    }
+}
+
+function applyDailyHideoutEffects() {
+    // Medical bay healing
+    const medbayLevel = state.hideout.medbay || 0;
+    if (medbayLevel > 0 && state.health < 100) {
+        const heal = HIDEOUT_UPGRADES.find(u => u.id === 'medbay').effects[medbayLevel - 1];
+        state.health = Math.min(100, state.health + heal);
+        if (heal > 0) log(`Hideout medbay: +${heal}% health`, 'good');
+    }
+}
+
+// ==================== HACKING MINI-GAME ====================
+
+let hackState = {
+    grid: [],
+    sequence: [],
+    selected: [],
+    timer: 10,
+    interval: null,
+    reward: 0,
+    callback: null
+};
+
+function startHacking(reward, callback) {
+    hackState.reward = reward;
+    hackState.callback = callback;
+    hackState.selected = [];
+    hackState.timer = 10;
+
+    // Generate 4x4 grid of hex codes
+    const chars = '0123456789ABCDEF';
+    hackState.grid = [];
+    for (let i = 0; i < 16; i++) {
+        hackState.grid.push(chars[Math.floor(Math.random() * chars.length)] + chars[Math.floor(Math.random() * chars.length)]);
+    }
+
+    // Generate sequence to match (3-4 items)
+    const seqLength = 3 + Math.floor(Math.random() * 2);
+    hackState.sequence = [];
+    for (let i = 0; i < seqLength; i++) {
+        hackState.sequence.push(hackState.grid[Math.floor(Math.random() * hackState.grid.length)]);
+    }
+
+    renderHackGame();
+    openModal('modal-hack');
+
+    // Start timer
+    hackState.interval = setInterval(() => {
+        hackState.timer--;
+        document.getElementById('hack-timer').innerText = hackState.timer;
+        if (hackState.timer <= 3) {
+            document.getElementById('hack-timer').style.color = 'var(--accent-red)';
+        }
+        if (hackState.timer <= 0) {
+            endHacking(false);
+        }
+    }, 1000);
+}
+
+function renderHackGame() {
+    // Render sequence
+    const seqDiv = document.getElementById('hack-sequence');
+    seqDiv.innerHTML = '';
+    hackState.sequence.forEach((code, i) => {
+        const span = document.createElement('span');
+        span.className = 'hack-target';
+        span.id = `hack-target-${i}`;
+        span.innerText = code;
+        seqDiv.appendChild(span);
+    });
+
+    // Render grid
+    const gridDiv = document.getElementById('hack-grid');
+    gridDiv.innerHTML = '';
+    hackState.grid.forEach((code, i) => {
+        const cell = document.createElement('div');
+        cell.className = 'hack-cell';
+        cell.innerText = code;
+        cell.onclick = () => selectHackCell(i);
+        gridDiv.appendChild(cell);
+    });
+
+    document.getElementById('hack-result').innerText = '';
+    document.getElementById('hack-timer').style.color = 'var(--accent-yellow)';
+}
+
+function selectHackCell(index) {
+    const code = hackState.grid[index];
+    const targetIndex = hackState.selected.length;
+
+    playSound('hack');
+
+    if (targetIndex >= hackState.sequence.length) return;
+
+    const cells = document.querySelectorAll('.hack-cell');
+
+    if (code === hackState.sequence[targetIndex]) {
+        // Correct!
+        hackState.selected.push(code);
+        cells[index].classList.add('correct');
+        document.getElementById(`hack-target-${targetIndex}`).classList.add('matched');
+
+        if (hackState.selected.length === hackState.sequence.length) {
+            // Won!
+            setTimeout(() => endHacking(true), 500);
+        }
+    } else {
+        // Wrong!
+        cells[index].classList.add('wrong');
+        setTimeout(() => endHacking(false), 500);
+    }
+}
+
+function endHacking(success) {
+    clearInterval(hackState.interval);
+
+    document.getElementById('hack-result').innerHTML = success
+        ? `<span class="text-green">BREACH SUCCESSFUL! +$${hackState.reward.toLocaleString()}</span>`
+        : '<span class="text-red">BREACH FAILED - ICE DETECTED</span>';
+
+    if (success) {
+        state.cash += hackState.reward;
+        state.stats.hacksCompleted++;
+        if (state.missionProgress) state.missionProgress.hacks = (state.missionProgress.hacks || 0) + 1;
+        playSound('achievement');
+    } else {
+        playSound('damage');
+    }
+
+    setTimeout(() => {
+        closeModal('modal-hack');
+        updateUI();
+        checkAchievements();
+        if (hackState.callback) hackState.callback(success);
+    }, 1500);
+}
+
+// ==================== NEGOTIATION MINI-GAME ====================
+
+let negotiateState = {
+    position: 0,
+    speed: 2,
+    direction: 1,
+    targetStart: 0,
+    targetEnd: 0,
+    interval: null,
+    stake: 0,
+    callback: null
+};
+
+function startNegotiation(stake, callback) {
+    negotiateState.stake = stake;
+    negotiateState.callback = callback;
+    negotiateState.position = 0;
+    negotiateState.speed = 2 + Math.random() * 2;
+    negotiateState.direction = 1;
+
+    // Target zone (green zone) - random position and size
+    const zoneSize = 15 + Math.random() * 10; // 15-25% of bar
+    negotiateState.targetStart = 60 + Math.random() * (25 - zoneSize);
+    negotiateState.targetEnd = negotiateState.targetStart + zoneSize;
+
+    // Set up target visual
+    const target = document.getElementById('negotiate-target');
+    target.style.left = negotiateState.targetStart + '%';
+    target.style.width = zoneSize + '%';
+
+    document.getElementById('negotiate-result').innerText = '';
+    document.getElementById('negotiate-btn').disabled = false;
+    document.getElementById('negotiate-info').innerText = `Stop in the green zone to win $${(stake * 2).toLocaleString()}!`;
+
+    openModal('modal-negotiate');
+
+    // Start movement
+    negotiateState.interval = setInterval(() => {
+        negotiateState.position += negotiateState.speed * negotiateState.direction;
+
+        if (negotiateState.position >= 100 || negotiateState.position <= 0) {
+            negotiateState.direction *= -1;
+        }
+
+        document.getElementById('negotiate-marker').style.left = negotiateState.position + '%';
+    }, 20);
+}
+
+function negotiateStop() {
+    clearInterval(negotiateState.interval);
+    document.getElementById('negotiate-btn').disabled = true;
+
+    const inZone = negotiateState.position >= negotiateState.targetStart &&
+                   negotiateState.position <= negotiateState.targetEnd;
+
+    if (inZone) {
+        state.cash += negotiateState.stake;
+        state.stats.negotiationsWon++;
+        document.getElementById('negotiate-result').innerHTML =
+            `<span class="text-green">SUCCESS! +$${(negotiateState.stake * 2).toLocaleString()}</span>`;
+        playSound('achievement');
+        log(`Won negotiation: +$${(negotiateState.stake * 2).toLocaleString()}`, 'good');
+    } else {
+        state.cash -= negotiateState.stake;
+        document.getElementById('negotiate-result').innerHTML =
+            `<span class="text-red">FAILED! -$${negotiateState.stake.toLocaleString()}</span>`;
+        playSound('damage');
+        log(`Lost negotiation: -$${negotiateState.stake.toLocaleString()}`, 'danger');
+    }
+
+    setTimeout(() => {
+        closeModal('modal-negotiate');
+        updateUI();
+        checkAchievements();
+        if (negotiateState.callback) negotiateState.callback(inZone);
+    }, 1500);
+}
+
+// ==================== INVENTORY THEFT RISK ====================
+
+function calculateTheftRisk() {
+    const inventoryValue = getInventoryValue();
+    const sectorDanger = SECTOR_TRAITS[state.loc].danger;
+    const securityLevel = state.hideout.security || 0;
+    const securityReduction = securityLevel > 0 ? HIDEOUT_UPGRADES.find(u => u.id === 'security').effects[securityLevel - 1] : 0;
+
+    // Base risk scales with inventory value and sector danger
+    let risk = (inventoryValue / 50000) * sectorDanger;
+
+    // Reduce by security
+    risk *= (1 - securityReduction);
+
+    // Cap at 40%
+    return Math.min(0.4, risk);
+}
+
+function checkCargoTheft() {
+    const risk = calculateTheftRisk();
+    if (Math.random() < risk) {
+        return true;
+    }
+    return false;
+}
+
+// ==================== SECTOR EVENTS ====================
+
+function applySectorModifiers() {
+    const sector = SECTOR_TRAITS[state.loc];
+
+    // Modify event chances based on sector
+    return {
+        dangerMod: sector.danger,
+        policeMod: sector.police
+    };
+}
+
+// ==================== UPDATE UI WITH NEW FEATURES ====================
+
+const originalUpdateUI = updateUI;
+updateUI = function() {
+    // Call original
+    originalUpdateUI.call(this);
+
+    // Update reputation display
+    const rep = state.reputation[state.loc] || 50;
+    const repLevel = getReputationLevel(rep);
+    document.getElementById('stat-rep').innerText = repLevel.name;
+    document.getElementById('stat-rep').className = 'stat-value text-cyan';
+    const repBar = document.getElementById('rep-bar-fill');
+    repBar.style.width = rep + '%';
+    repBar.className = 'rep-fill ' + repLevel.class;
+
+    // Update market with price predictions
+    if (state.hasScanner) {
+        ITEMS.forEach(item => {
+            const row = document.getElementById(`row-${item.id}`);
+            if (row) {
+                const priceCell = row.children[1];
+                const prediction = getPricePrediction(item.id);
+
+                // Remove old prediction
+                const oldPred = priceCell.querySelector('.price-prediction');
+                if (oldPred) oldPred.remove();
+
+                if (prediction) {
+                    const predSpan = document.createElement('span');
+                    predSpan.className = `price-prediction ${prediction.class}`;
+                    predSpan.innerText = prediction.text;
+                    priceCell.appendChild(predSpan);
+                }
+            }
+        });
+    }
+};
+
+// ==================== UPDATE TRAVEL WITH NEW FEATURES ====================
+
+const originalTravel = travel;
+travel = function(idx) {
+    if (state.gameOver) return;
+
+    // Track health before travel
+    state.stats.lastHealth = state.health;
+
+    // Play travel sound
+    playSound('travel');
+
+    // Call original travel
+    originalTravel.call(this, idx);
+
+    // Track sector visit
+    state.stats.sectorsVisited.add(idx);
+
+    // Apply daily hideout effects
+    applyDailyHideoutEffects();
+
+    // Update mission progress
+    updateMissionProgress();
+
+    // Check for NPC encounter (20% chance)
+    checkNpcEncounter();
+
+    // Check for cargo theft (high value = higher risk)
+    if (checkCargoTheft()) {
+        triggerCargoTheft();
+    }
+
+    // Update stats for achievements
+    if (state.health >= state.stats.lastHealth) {
+        state.stats.daysWithoutDamage++;
+    } else {
+        state.stats.daysWithoutDamage = 0;
+    }
+
+    // Check achievements
+    checkAchievements();
+};
+
+function triggerCargoTheft() {
+    const items = ITEMS.filter(i => state.inventory[i.id] > 0);
+    if (items.length === 0) return;
+
+    const item = items[Math.floor(Math.random() * items.length)];
+    const securityLevel = state.hideout.security || 0;
+    const protection = securityLevel > 0 ? HIDEOUT_UPGRADES.find(u => u.id === 'security').effects[securityLevel - 1] : 0;
+
+    let lossPercent = 0.15 + Math.random() * 0.15; // 15-30% loss
+    lossPercent *= (1 - protection); // Reduce by hideout security
+
+    const lost = Math.ceil(state.inventory[item.id] * lossPercent);
+    if (lost > 0) {
+        state.inventory[item.id] -= lost;
+        log(`Cargo theft! Lost ${lost}x ${item.name} (high-value cargo attracted thieves)`, 'danger');
+        flashScreen('damage');
+        playSound('damage');
+    }
+}
+
+// ==================== UPDATE TRADE WITH STATS ====================
+
+const originalConfirmTrade = confirmTrade;
+confirmTrade = function(itemId, type) {
+    const qtyBefore = state.inventory[itemId];
+    const cashBefore = state.cash;
+
+    originalConfirmTrade.call(this, itemId, type);
+
+    // Track trade stats
+    if (state.inventory[itemId] !== qtyBefore || state.cash !== cashBefore) {
+        state.stats.trades++;
+
+        if (type === 'sell') {
+            const profit = state.cash - cashBefore;
+            if (profit > 0) {
+                state.stats.totalProfit += profit;
+                state.stats.biggestProfit = Math.max(state.stats.biggestProfit, profit);
+
+                // Update mission progress for profit missions
+                if (state.missionProgress) {
+                    state.missionProgress.profit = (state.missionProgress.profit || 0) + profit;
+                }
+            }
+            playSound('sell');
+        } else {
+            playSound('buy');
+        }
+
+        checkAchievements();
+    }
+};
 
 init();
 checkAutoLoad();
